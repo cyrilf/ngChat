@@ -45,7 +45,8 @@ io.sockets.on('connection', socketManager.handleSocket);
 /**
  * Launch server
  */
-server.listen(2377, function() {
+var port = process.env.PORT || 2377;
+server.listen(port, function() {
   console.log("ngChat is ready, you can chat at http://%s:%d",
     server.address().address, server.address().port);
 });
