@@ -1,0 +1,10 @@
+{
+  "name": "ngChat",
+  "description": "A chat application with Angular, Socket.IO and NodeJs",
+  "version": "0.0.1",
+  "dependencies": {
+    "express": "~3.2.4",
+    "jade": "~0.30.0",
+    "socket.io": "~0.9.14"
+  }
+}

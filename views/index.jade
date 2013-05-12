@@ -1,0 +1,32 @@
+extends layout
+
+block body
+  #container.page-center(ng-controller='ngChatCtrl')
+    #chat-section
+      #chat-messages(ng-cloak)
+        //- If no messages
+        .chat-message.chat-info(ng-show="!messages.length")
+          .chat-message-username
+            | system
+          .chat-message-content
+            | No messages
+
+        //- Diplay messages
+        .chat-message(ng-repeat='message in messages',
+          ng-class='{"chat-info": message.user == "system"}',
+          ng-class-even='"text-right"')
+          .chat-message-username
+            | {{message.user}}
+          .chat-content
+            | {{message.content}}
+
+      #chat-send-message
+        form(ng-submit='sendMessage()')
+          input#chat-input(size='60', ng-model='message', type='text')
+          input.btn.btn-info#chat-submit(type='submit', value='Send')
+
+  script(src='javascripts/vendor/angular/angular.min.js')
+  script(src='/socket.io/socket.io.js')
+  script(src='javascripts/app.js')
+  script(src='javascripts/services.js')
+  script(src='javascripts/ngChatCtrl.js')
