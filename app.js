@@ -18,7 +18,6 @@
 var app            = module.exports = require('express')();
 var http           = require('http');
 var server         = http.createServer(app);
-var io             = require('socket.io').listen(server);
 
 /**
  * Require our files
@@ -38,9 +37,10 @@ appManager.configure(app);
 routeManager.init(app);
 
 /**
- * Create a socket on a client connection
+ * Configure socket.io and
+ * create a socket on a client connection
  */
-io.sockets.on('connection', socketManager.handleSocket);
+socketManager.configure(server);
 
 /**
  * Launch server

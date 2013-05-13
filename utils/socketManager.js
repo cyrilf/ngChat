@@ -2,10 +2,33 @@ var userModel = require('../models/user');
 
 /**
  * SocketManager
+ * - Configure socket.io
  * - Handle the socket connection
  * @type {Object}
  */
 var SocketManager = {
+  /**
+   * Configure the socket.io connection
+   * @param  {Object} server A server object
+   */
+  configure: function(server) {
+    var io = require('socket.io').listen(server);
+
+    // Development
+    io.configure('development', function(){
+      io.set('transports', ['websocket']);
+    });
+
+    // Production (following Heroku recommendations)
+    io.configure('production', function () {
+      io.set("transports", ["xhr-polling"]);
+      io.set("polling duration", 10);
+    });
+
+    // Handle new socket connection
+    io.sockets.on('connection', SocketManager.handleSocket);
+  },
+
   /**
    * Handle the socket connection and listen for event
    * @param  {Object} socket the socket from the conenction
