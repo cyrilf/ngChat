@@ -62,11 +62,14 @@ function ngChatCtrl($scope, socket) {
    * Send a message
    */
   $scope.sendMessage = function() {
-    socket.emit('send:message', {
-      message: $scope.message
-    });
+    var message = $scope.message.trim();
+    if(message !== '') {
+      socket.emit('send:message', {
+        message: message
+      });
 
-    addMessage($scope.username, $scope.message);
+      addMessage($scope.username, message);
+    }
     $scope.message = '';
   };
 }
