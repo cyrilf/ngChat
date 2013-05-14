@@ -1,11 +1,12 @@
+var _ = require('underscore');
 /**
  * userModel
  * - Management of the username
  * @type {Object}
  */
 var userModel = {
-  // List of usernames used
-  usernames: [],
+  // List of users
+  users: [],
 
   /**
    * Claim a username
@@ -13,10 +14,16 @@ var userModel = {
    * @return {Boolean}         is the username already used or no ?
    */
   claim : function(username) {
-    if (!username || this.usernames[username]) {
+    var userAlreadyExist = _.find(this.users, function findUser(user) {
+      return (user.username === username);
+    });
+    if (!username || userAlreadyExist) {
       return false;
     } else {
-      this.usernames[username] = true;
+      var newUser = {
+        username: username
+      };
+      this.users.push(newUser);
       return true;
     }
   },
@@ -38,17 +45,13 @@ var userModel = {
   },
 
   /**
-   * Remove a username (on disconnection)
+   * Remove a user (on disconnection)
    * @param  {String} username username to remove
    */
   remove: function(username) {
-    var currentUsername;
-    for(var i = 0, l = this.usernames.length; i < l; i++) {
-      currentUsername = this.usernames[i];
-      if(currentUsername === username) {
-        delete currentUsername;
-      }
-    }
+    this.users = _.reject(this.users, function removeUser(user) {
+      return (user.username === username);
+    });
   }
 };
 

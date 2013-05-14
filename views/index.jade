@@ -25,8 +25,20 @@ block body
           input#chat-input(size='60', ng-model='message', type='text')
           input.btn.btn-info#chat-submit(type='submit', value='Send')
 
+      h2
+        | Connected users
+
+      #chat-users
+        .chat-user(ng-repeat='user in users',
+            ng-class='{"chat-current-user": user.username == username}',
+            ng-class-even='"chat-user-right"')
+          | {{user.username}}
+          span(ng-show='user.username == username')
+            | &nbsp;(that's you)
+
   script(src='javascripts/vendor/angular/angular.min.js')
   script(src='/socket.io/socket.io.js')
+  script(src='javascripts/vendor/underscore/underscore-min.js')
   script(src='javascripts/app.js')
   script(src='javascripts/services.js')
   script(src='javascripts/ngChatCtrl.js')

@@ -40,7 +40,7 @@ var SocketManager = {
     // Send the username and the list of connected users
     socket.emit('init', {
       username: username,
-      users: userModel.usernames
+      users: userModel.users
     });
 
     // Notify other clients that a new user is here

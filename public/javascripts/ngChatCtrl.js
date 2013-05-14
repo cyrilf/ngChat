@@ -5,6 +5,8 @@
  */
 function ngChatCtrl($scope, socket) {
 
+  $scope.messages = [];
+
   /**
    * Socket events listeners
    */
@@ -21,26 +23,19 @@ function ngChatCtrl($scope, socket) {
   });
 
   // When a new user is connected
-  socket.on('new:user', function (data) {
-    var content = 'User ' + data.username + ' is here.';
-    sendMessage('system', content);
-
-    $scope.users.push(data.username);
+  socket.on('new:user', function (user) {
+    var content = 'User ' + user.username + ' is here.';
+    addMessage('system', content);
+    $scope.users.push(user);
   });
 
   // When a user disconnnect
-  socket.on('leave:user', function (data) {
-    var content = 'User ' + data.username + ' has just left.';
-    sendMessage('system', content);
-
-    var user;
-    for (var i = 0, l = $scope.users.length; i < l; i++) {
-      user = $scope.users[i];
-      if (user === data.username) {
-        $scope.users.splice(i, 1);
-        break;
-      }
-    }
+  socket.on('leave:user', function (userLeave) {
+    var content = 'User ' + userLeave.username + ' has just left.';
+    addMessage('system', content);
+    $scope.users = _.reject($scope.users, function removeUser(user) {
+      return (user.username === userLeave.username);
+    });
   });
 
   /**
@@ -48,11 +43,11 @@ function ngChatCtrl($scope, socket) {
    */
 
   /**
-   * Send a message from a user
+   * Add a message to the messages
    * @param  {String} username username of the sender
    * @param  {String} content  content of the message
    */
-  var sendMessage = function (username, content) {
+  var addMessage = function (username, content) {
     $scope.messages.push({
       user: username,
       content: content
@@ -63,8 +58,6 @@ function ngChatCtrl($scope, socket) {
    * Methods called in public side (attached to $scope)
    */
 
-  $scope.messages = [];
-
   /**
    * Send a message
    */
@@ -73,7 +66,7 @@ function ngChatCtrl($scope, socket) {
       message: $scope.message
     });
 
-    sendMessage($scope.username, $scope.message);
+    addMessage($scope.username, $scope.message);
     $scope.message = '';
   };
 }
