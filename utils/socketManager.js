@@ -48,6 +48,25 @@ var SocketManager = {
       username: username
     });
 
+    // Validate and notify a username change
+    socket.on('change:username', function (data, callback) {
+      if (userModel.claim(data.username)) {
+        var oldUsername = username;
+        userModel.remove(oldUsername);
+
+        username = data.username;
+
+        socket.broadcast.emit('change:username', {
+          oldUsername: oldUsername,
+          newUsername: username
+        });
+
+        callback(true);
+      } else {
+        callback(false);
+      }
+    });
+
     // Send a message to all users (broadcast)
     socket.on('send:message', function(data) {
       socket.broadcast.emit('send:message', {

@@ -144,7 +144,6 @@ input[type="text"] {
   width: 77%;
   height: 26px;
   background-color: #1abc9c;
-  /*color: #34495e;*/
   color: white;
 }
 
@@ -222,4 +221,8 @@ input[type="text"] {
 
 .chat-current-user {
   background-color: #7F8C8D;
+}
+
+.chat-user form #change-username {
+  width: 94%;
 }

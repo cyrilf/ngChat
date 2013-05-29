@@ -33,8 +33,9 @@ block body
             ng-class='{"chat-current-user": user.username == username}',
             ng-class-even='"chat-user-right"')
           | {{user.username}}
-          span(ng-show='user.username == username')
-            | &nbsp;(that's you)
+          div(ng-show='user.username == username')
+            form(ng-submit='changeUsername()')
+              input#change-username(size='20', ng-model='newUsername', type='text', placeholder='Type a new username')
 
   script(src='javascripts/vendor/angular/angular.min.js')
   script(src='/socket.io/socket.io.js')
