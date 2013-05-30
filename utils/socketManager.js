@@ -34,53 +34,63 @@ var SocketManager = {
    * @param  {Object} socket the socket from the conenction
    */
   handleSocket: function(socket) {
-    // Generate a new username
-    var username = userModel.generateUsername();
 
-    // Send the username and the list of connected users
-    socket.emit('init', {
-      username: username,
-      users: userModel.users
-    });
+    // The user send us his username (from localstorage)
+    socket.on('hello', function(data) {
 
-    // Notify other clients that a new user is here
-    socket.broadcast.emit('new:user', {
-      username: username
-    });
+      var username = data.username;
 
-    // Validate and notify a username change
-    socket.on('change:username', function (data, callback) {
-      if (userModel.claim(data.username)) {
-        var oldUsername = username;
-        userModel.remove(oldUsername);
-
-        username = data.username;
-
-        socket.broadcast.emit('change:username', {
-          oldUsername: oldUsername,
-          newUsername: username
-        });
-
-        callback(true);
-      } else {
-        callback(false);
+      // If no username has been sent or the username is already taken,
+      // we generate a new one.
+      if(!userModel.claim(username)) {
+        username = userModel.generateUsername();
       }
-    });
 
-    // Send a message to all users (broadcast)
-    socket.on('send:message', function(data) {
-      socket.broadcast.emit('send:message', {
-        user: username,
-        content: data.message
+      // Send the username and the list of connected users
+      socket.emit('init', {
+        username: username,
+        users: userModel.users
       });
-    });
 
-    // Notify all users that someone has disconnected
-    socket.on('disconnect', function() {
-      socket.broadcast.emit('leave:user', {
+      // Notify other clients that a new user is here
+      socket.broadcast.emit('new:user', {
         username: username
       });
-      userModel.remove(username);
+
+      // Validate and notify a username change
+      socket.on('change:username', function (data, callback) {
+        if (userModel.claim(data.username)) {
+          var oldUsername = username;
+          userModel.remove(oldUsername);
+
+          username = data.username;
+
+          socket.broadcast.emit('change:username', {
+            oldUsername: oldUsername,
+            newUsername: username
+          });
+
+          callback(true);
+        } else {
+          callback(false);
+        }
+      });
+
+      // Send a message to all users (broadcast)
+      socket.on('send:message', function(data) {
+        socket.broadcast.emit('send:message', {
+          user: username,
+          content: data.message
+        });
+      });
+
+      // Notify all users that someone has disconnected
+      socket.on('disconnect', function() {
+        socket.broadcast.emit('leave:user', {
+          username: username
+        });
+        userModel.remove(username);
+      });
     });
   }
 };
