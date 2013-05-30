@@ -2,8 +2,8 @@ extends layout
 
 block body
   #container.page-center(ng-controller='ngChatCtrl')
-    #chat-section
-      #chat-messages(ng-cloak)
+    #chat-section(ng-cloak)
+      #chat-messages
         //- If no messages
         .chat-message.chat-info(ng-show="!messages.length")
           .chat-message-username
@@ -13,8 +13,7 @@ block body
 
         //- Diplay messages
         .chat-message(ng-repeat='message in messages',
-          ng-class='{"chat-info": message.user == "system"}',
-          ng-class-even='"text-right"')
+          ng-class='{"chat-info": message.user == "system", "text-right": message.user == username}')
           .chat-message-username
             | {{message.user}}
           .chat-content
