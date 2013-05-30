@@ -14,6 +14,7 @@ function ngChatCtrl($scope, socket) {
   // Create content for a new user
   socket.on('init', function (data) {
     $scope.username = data.username;
+    $scope.newUsername = data.username;
     $scope.users    = data.users;
   });
 
@@ -92,7 +93,7 @@ function ngChatCtrl($scope, socket) {
       } else {
         changeUsername($scope.username, self.newUsername);
         $scope.username = self.newUsername;
-        self.newUsername = '';
+        self.displayChangeUsername = false;
       }
     });
   };

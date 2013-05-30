@@ -32,10 +32,18 @@ block body
         .chat-user(ng-repeat='user in users',
             ng-class='{"chat-current-user": user.username == username}',
             ng-class-even='"chat-user-right"')
-          | {{user.username}}
           div(ng-show='user.username == username')
-            form(ng-submit='changeUsername()')
-              input#change-username(size='20', ng-model='newUsername', type='text', placeholder='Type a new username')
+            div(ng-show='!displayChangeUsername',
+              ng-click='displayChangeUsername=!displayChangeUsername')
+              span {{user.username}}
+              img(class='icon icon-pencil', src='images/pencil.png')
+            form(ng-show='displayChangeUsername', ng-submit='changeUsername()')
+              input#change-username(size='20', ng-model='newUsername', type='text')
+              img(class='icon icon-cross', src='images/cross.png',
+               ng-click='displayChangeUsername=false')
+          div(ng-show='user.username != username')
+            div
+              span {{user.username}}
 
   script(src='javascripts/vendor/angular/angular.min.js')
   script(src='/socket.io/socket.io.js')
