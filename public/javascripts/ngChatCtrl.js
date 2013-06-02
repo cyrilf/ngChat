@@ -33,8 +33,8 @@ function ngChatCtrl($scope, socket) {
     var usernameAlreadyUsed = (localStorage.username &&
       (localStorage.username !== data.username));
     if (usernameAlreadyUsed) {
-      var content = 'Sorry, someone is using your username.' +
-        ' We picked a new one for you, you\'re free to change it.';
+      var content = 'Sorry, your username is already used or is invalid.' +
+        ' We picked a new one for you, you\'re free to change it now.';
       addMessage('system', content);
     }
   });
@@ -107,10 +107,9 @@ function ngChatCtrl($scope, socket) {
     var self = this;
     socket.emit('change:username', {
       username: this.newUsername
-    }, function (usernameChanged) {
-      if (!usernameChanged) {
-        var content = 'This username is already taken, choose another one.';
-        addMessage('system', content);
+    }, function (error) {
+      if (error) {
+        addMessage('system', error.message);
       } else {
         changeUsername($scope.username, self.newUsername);
         $scope.username = self.newUsername;

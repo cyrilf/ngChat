@@ -8,7 +8,7 @@ var RouteManager = {
    * @param  {Object} app The app
    */
   init: function(app) {
-    require('../routes/root')(app);
+    require('../routes/rootRoute')(app);
   }
 };
 

@@ -52,6 +52,38 @@ var userModel = {
     this.users = _.reject(this.users, function removeUser(user) {
       return (user.username === username);
     });
+  },
+
+  /**
+   * Validate a username
+   * A valid username is :
+   *   + Not a forbidden one
+   *   + Aplha and Numeric
+   *   + @ . + _ - are accepted symbols
+   *   + Between 2 and 35 chars long
+   * @param  {String} username  the username to validate
+   * @return {Boolean}          Is the username valid ?
+   */
+  validateUsername: function(username) {
+    // Check if the username is not a forbidden one
+    var forbiddenUsernames = [
+      'system'
+    ];
+    var isForbiddenUsername = _.find(forbiddenUsernames, function(forbiddenUsername) {
+      return (forbiddenUsername == username);
+    });
+
+    if(isForbiddenUsername) {
+      return false;
+    }
+
+    // Check if it's a valid username
+    var validUsername = /^[a-zA-Z0-9@\.\+ _-]{2,35}$/;
+    if(!validUsername.test(username)) {
+      return false;
+    }
+
+    return true;
   }
 };
 

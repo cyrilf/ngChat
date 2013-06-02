@@ -1,4 +1,4 @@
-var userModel = require('../models/user');
+var userModel = require('../models/userModel');
 
 /**
  * SocketManager
@@ -40,9 +40,9 @@ var SocketManager = {
 
       var username = data.username;
 
-      // If no username has been sent or the username is already taken,
+      // If no username has been sent or the username isn't valid or is already taken,
       // we generate a new one.
-      if(!userModel.claim(username)) {
+      if(!userModel.validateUsername(username) || !userModel.claim(username)) {
         username = userModel.generateUsername();
       }
 
@@ -59,20 +59,38 @@ var SocketManager = {
 
       // Validate and notify a username change
       socket.on('change:username', function (data, callback) {
-        if (userModel.claim(data.username)) {
-          var oldUsername = username;
-          userModel.remove(oldUsername);
+        var error = {};
 
-          username = data.username;
+        // Validate the username
+        if(userModel.validateUsername(data.username)) {
 
-          socket.broadcast.emit('change:username', {
-            oldUsername: oldUsername,
-            newUsername: username
-          });
+          // Check if the username isn't already taken.
+          if(userModel.claim(data.username)) {
 
-          callback(true);
+            var oldUsername = username;
+            userModel.remove(oldUsername);
+
+            username = data.username;
+
+            socket.broadcast.emit('change:username', {
+              oldUsername: oldUsername,
+              newUsername: username
+            });
+
+            // Everything's fine. Username changed.
+            callback();
+          } else {
+            error.message = 'This username is already taken, please choose another one.';
+            callback(error);
+          }
         } else {
-          callback(false);
+          error.message = 'The username isn\'t valid.'
+                          + '\n A valid username is :'
+                            + '\n Not a forbidden one'
+                            + '\n / Aplha and Numeric'
+                            + '\n /  @ . + _ - symbols are accepted'
+                            + '\n / Between 2 and 35 chars long';
+          callback(error);
         }
       });
 
