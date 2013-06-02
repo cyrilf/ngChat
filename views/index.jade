@@ -7,13 +7,13 @@ block body
         //- If no messages
         .chat-message.chat-info(ng-show="!messages.length")
           .chat-message-username
-            | system
+            | {{robotName}}
           .chat-message-content
             | No messages
 
         //- Diplay messages
         .chat-message(ng-repeat='message in messages',
-          ng-class='{"chat-info": message.user == "system", "text-right": message.user == username}')
+          ng-class='{"chat-info": message.user == robotName, "text-right": message.user == username}')
           .chat-message-username
             | {{message.user}}
           .chat-content
@@ -49,4 +49,5 @@ block body
   script(src='javascripts/vendor/underscore/underscore-min.js')
   script(src='javascripts/app.js')
   script(src='javascripts/services.js')
+  script(src='javascripts/conf.js')
   script(src='javascripts/ngChatCtrl.js')

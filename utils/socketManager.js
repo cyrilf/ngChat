@@ -1,4 +1,5 @@
 var userModel = require('../models/userModel');
+var Conf      = require('../public/javascripts/conf').Conf;
 
 /**
  * SocketManager
@@ -80,16 +81,11 @@ var SocketManager = {
             // Everything's fine. Username changed.
             callback();
           } else {
-            error.message = 'This username is already taken, please choose another one.';
+            error.message = Conf.messages.usernameAlreadyTaken;
             callback(error);
           }
         } else {
-          error.message = 'The username isn\'t valid.'
-                          + '\n A valid username is :'
-                            + '\n Not a forbidden one'
-                            + '\n / Aplha and Numeric'
-                            + '\n /  @ . + _ - symbols are accepted'
-                            + '\n / Between 2 and 35 chars long';
+          error.message = Conf.messages.usernameInvalid;
           callback(error);
         }
       });
@@ -105,7 +101,7 @@ var SocketManager = {
           callback();
         } else {
           var error = {
-            message: 'Your message is too long or invalid, it wasn\'t sent.'
+            message: Conf.messages.messageInvalid
           };
           callback(error);
         }

@@ -25,6 +25,7 @@ var server         = http.createServer(app);
 var appManager     = require('./utils/appManager');
 var routeManager   = require('./utils/routeManager');
 var socketManager  = require('./utils/socketManager');
+var conf           = require('./public/javascripts/conf').Conf;
 
 /**
  * App configuration
@@ -45,7 +46,7 @@ socketManager.configure(server);
 /**
  * Launch server
  */
-var port = process.env.PORT || 2377;
+var port = process.env.PORT || conf.port;
 server.listen(port, function() {
   console.log("ngChat is ready, you can chat at http://%s:%d",
     server.address().address, server.address().port);

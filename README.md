@@ -11,7 +11,7 @@ That's why the live version isn't as effective as a local one.
 
 ## Requirements
 
-- NodeJs installed on your computer.
+- nodeJs installed on your computer.
 
 ## Steps
 
@@ -30,5 +30,9 @@ Enter this url in your web browser :
     localhost:2377
 
 ###4 - Enjoy and chat
+
+## Configuration
+
+You can easily configure this application to fit your needs by editing the `public/javascripts/conf.js`.
 
 [Cyril F - Web developer](http://cyrilf.com)

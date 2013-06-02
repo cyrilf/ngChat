@@ -6,6 +6,7 @@
 function ngChatCtrl($scope, socket) {
 
   $scope.messages = [];
+  $scope.robotName = Conf.robotName;
 
   /**
    * At the very beginning, we say to the server:
@@ -33,9 +34,8 @@ function ngChatCtrl($scope, socket) {
     var usernameAlreadyUsed = (localStorage.username &&
       (localStorage.username !== data.username));
     if (usernameAlreadyUsed) {
-      var content = 'Sorry, your username is already used or is invalid.' +
-        ' We picked a new one for you, you\'re free to change it now.';
-      addMessage('system', content);
+      var content = Conf.messages.initBadUsername;
+      addMessage(Conf.robotName, content);
     }
   });
 
@@ -51,15 +51,15 @@ function ngChatCtrl($scope, socket) {
 
   // When a new user connects
   socket.on('new:user', function (user) {
-    var content = user.username + ' is here.';
-    addMessage('system', content);
+    var content = _.template(Conf.messages.newUser)({username: user.username});
+    addMessage(Conf.robotName, content);
     $scope.users.push(user);
   });
 
   // When a user disconnnects
   socket.on('leave:user', function (userLeave) {
-    var content = userLeave.username + ' has just left.';
-    addMessage('system', content);
+    var content = _.template(Conf.messages.leaveUser)({username: userLeave.username});
+    addMessage(Conf.robotName, content);
     $scope.users = _.reject($scope.users, function removeUser(user) {
       return (user.username === userLeave.username);
     });
@@ -77,8 +77,10 @@ function ngChatCtrl($scope, socket) {
   var changeUsername = function(oldUsername, newUsername) {
     var user = _.findWhere($scope.users, {username: oldUsername});
     user.username = newUsername;
-    var content = oldUsername + ' changed his username to ' + newUsername + '.';
-    addMessage('system', content);
+    var content = _.template(Conf.messages.changeUsername)(
+      {oldUsername: oldUsername, newUsername: newUsername}
+    );
+    addMessage(Conf.robotName, content);
   };
 
   /**
@@ -109,7 +111,7 @@ function ngChatCtrl($scope, socket) {
       username: this.newUsername
     }, function (error) {
       if (error) {
-        addMessage('system', error.message);
+        addMessage(Conf.robotName, error.message);
       } else {
         changeUsername($scope.username, self.newUsername);
         $scope.username = self.newUsername;
@@ -129,7 +131,7 @@ function ngChatCtrl($scope, socket) {
         message: message
       }, function(error) {
         if(error) {
-          addMessage('system', error.message);
+          addMessage(Conf.robotName, error.message);
         } else {
           addMessage($scope.username, message);
           $scope.message = '';

@@ -1,4 +1,6 @@
-var _ = require('underscore');
+var _    = require('underscore');
+var Conf = require('../public/javascripts/conf').Conf;
+
 /**
  * userModel
  * - Management of the username
@@ -37,7 +39,7 @@ var userModel = {
     var nextUserId = 1;
 
     do {
-      username = 'Guest ' + nextUserId;
+      username = Conf.defaultUsername + nextUserId;
       nextUserId += 1;
     } while (!this.claim(username));
 
@@ -67,7 +69,7 @@ var userModel = {
   validateUsername: function(username) {
     // Check if the username is not a forbidden one
     var forbiddenUsernames = [
-      'system'
+      Conf.robotName
     ];
     var isForbiddenUsername = _.find(forbiddenUsernames, function(forbiddenUsername) {
       return (forbiddenUsername == username);
@@ -78,7 +80,7 @@ var userModel = {
     }
 
     // Check if it's a valid username
-    var validUsername = /^[a-zA-Z0-9@\.\+ _-]{2,35}$/;
+    var validUsername = Conf.validUsername.regex;
     if(!validUsername.test(username)) {
       return false;
     }
@@ -95,7 +97,7 @@ var userModel = {
    */
   validateMessage: function(message) {
     var length = message.length;
-    if(length <= 0 || length > 350) {
+    if(length <= Conf.validMessage.length.min || length > Conf.validMessage.length.max) {
       return false;
     }
 
