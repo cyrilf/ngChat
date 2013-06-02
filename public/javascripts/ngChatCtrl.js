@@ -127,10 +127,14 @@ function ngChatCtrl($scope, socket) {
     if (message !== '') {
       socket.emit('send:message', {
         message: message
+      }, function(error) {
+        if(error) {
+          addMessage('system', error.message);
+        } else {
+          addMessage($scope.username, message);
+          $scope.message = '';
+        }
       });
-
-      addMessage($scope.username, message);
     }
-    $scope.message = '';
   };
 }

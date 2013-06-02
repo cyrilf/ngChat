@@ -95,11 +95,20 @@ var SocketManager = {
       });
 
       // Send a message to all users (broadcast)
-      socket.on('send:message', function(data) {
-        socket.broadcast.emit('send:message', {
-          user: username,
-          content: data.message
-        });
+      socket.on('send:message', function (data, callback) {
+        if(userModel.validateMessage(data.message)) {
+          socket.broadcast.emit('send:message', {
+            user: username,
+            content: data.message
+          });
+
+          callback();
+        } else {
+          var error = {
+            message: 'Your message is too long or invalid, it wasn\'t sent.'
+          };
+          callback(error);
+        }
       });
 
       // Notify all users that someone has disconnected

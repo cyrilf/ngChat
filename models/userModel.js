@@ -84,6 +84,22 @@ var userModel = {
     }
 
     return true;
+  },
+
+  /**
+   * Validate a message
+   * A valid message is :
+   *   + Between 1 and 350 chars long
+   * @param  {String} message   the message to validate
+   * @return {Boolean}          Is the message valid ?
+   */
+  validateMessage: function(message) {
+    var length = message.length;
+    if(length <= 0 || length > 350) {
+      return false;
+    }
+
+    return true;
   }
 };
 
