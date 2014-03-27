@@ -4,7 +4,7 @@
 
 A tiny-chat application with Angular, Socket.IO and NodeJs
 
-[![windmill](https://raw.github.com/cyrilf/ngChat/master/nchat.png)](http://ngchat.herokuapp.com)
+[![windmill](https://raw.github.com/cyrilf/ngChat/master/ngchat.png)](http://ngchat.herokuapp.com)
 
 > A live version can be found here : [ngChat on Heroku](http://ngchat.herokuapp.com/)
 
