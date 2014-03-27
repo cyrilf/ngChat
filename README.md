@@ -4,9 +4,11 @@
 
 A tiny-chat application with Angular, Socket.IO and NodeJs
 
+[![windmill](https://raw.github.com/cyrilf/ngChat/master/nchat.png)](http://ngchat.herokuapp.com)
+
 > A live version can be found here : [ngChat on Heroku](http://ngchat.herokuapp.com/)
 
-:grey_exclamation: Heroku doesn't support websockets for now ([source](https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku)).  
+:grey_exclamation: Heroku doesn't support websockets for now ([source](https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku)).
 That's why the live version isn't as effective as a local one.
 
 ## Requirements
